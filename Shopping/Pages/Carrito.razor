@@ -1,0 +1,69 @@
+﻿@page "/carrito"
+@using Shopping.Models
+@using Shopping.BLL
+
+<div class="container">
+	<div class="card">
+		<div class="card-header">
+			<h3>Carrito</h3>
+		</div>
+		<div class="card-body">
+			<table class="table table-striped table-dark">
+				<thead class="thead-light">
+					<tr>
+						<th>Imagen</th>
+						<th>Titulo</th>
+						<th>Precio</th>
+						<th>Catidad</th>
+					</tr>
+				</thead>
+				<tbody>	
+					@foreach(var item in products)
+					{
+						<tr>
+							<td><img src="@item.image"/></td>
+							<td>@item.title</td>
+							<td>@item.price</td>
+							<td>@item.cantidad</td>
+						</tr>
+					}								
+				</tbody>
+			</table>
+			<div>
+				<label>Total a pagar</label>
+				<input type="number" readonly="true" @bind="total" class="form-control"/>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+<style>
+	img{
+		height: 40px;
+		width: 40px
+	}
+</style>
+
+@code {
+	private List<Products> products { get; set; }
+	public decimal total { get; set; }
+
+	protected override void OnInitialized()
+	{
+		base.OnInitialized();
+		products = ProductsBLL.GetList(x => true);
+		TotalPrecio();
+	}
+
+	 private void TotalPrecio()
+
+    {
+        foreach (var item in products)
+        {
+            total += (item.cantidad * item.price);
+        }
+    }
+
+ 
+}
